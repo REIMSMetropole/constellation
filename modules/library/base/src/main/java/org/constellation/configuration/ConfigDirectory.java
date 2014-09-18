@@ -654,8 +654,12 @@ public final class ConfigDirectory {
     }
 
     public static void shutdownTestEnvironement(final String directoryName) throws IOException {
-        FileUtilities.deleteDirectory(Paths.get(directoryName));
-        FileUtilities.deleteDirectory(Paths.get(directoryName+ "-data"));
+        if (Paths.get(directoryName).toFile().exists()) {
+            FileUtilities.deleteDirectory(Paths.get(directoryName));
+        }
+        if (Paths.get(directoryName+ "-data").toFile().exists()) {
+            FileUtilities.deleteDirectory(Paths.get(directoryName + "-data"));
+        }
         setConfigDirectory(null);
         setDataDirectory(null);
     }

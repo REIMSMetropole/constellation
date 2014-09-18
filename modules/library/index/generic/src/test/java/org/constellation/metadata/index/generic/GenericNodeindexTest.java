@@ -94,7 +94,9 @@ public class GenericNodeindexTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
 
-        FileUtilities.deleteDirectory(configDirectory.toPath());
+        if (configDirectory.exists() && configDirectory.isDirectory()) {
+            FileUtilities.deleteDirectory(configDirectory.toPath());
+        }
         List<Node> object         = fillTestData();
         indexer                   = new NodeIndexer(object, null, configDirectory, "", true);
         indexSearcher             = new LuceneIndexSearcher(configDirectory, "", null, true);

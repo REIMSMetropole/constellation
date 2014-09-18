@@ -101,7 +101,9 @@ public class GenericindexTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
 
-        FileUtilities.deleteDirectory(configDirectory.toPath());
+        if (configDirectory.exists() && configDirectory.isDirectory()) {
+            FileUtilities.deleteDirectory(configDirectory.toPath());
+        }
         List<Object> object       = fillTestData();
         indexer                   = new GenericIndexer(object, null, configDirectory, "", true);
         indexSearcher             = new LuceneIndexSearcher(configDirectory, "", null, true);

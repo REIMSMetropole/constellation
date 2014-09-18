@@ -62,7 +62,9 @@ public class ClassicAnalyzerTest extends AbstractAnalyzerTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        FileUtilities.deleteDirectory(configDirectory.toPath());
+        if (configDirectory.exists() && configDirectory.isDirectory()) {
+            FileUtilities.deleteDirectory(configDirectory.toPath());
+        }
         List<Object> object = fillTestData();
         GenericIndexer indexer = new GenericIndexer(object, null, configDirectory, "", new ClassicAnalyzer(Version.LUCENE_4_9), Level.FINER, true);
         indexer.destroy();
