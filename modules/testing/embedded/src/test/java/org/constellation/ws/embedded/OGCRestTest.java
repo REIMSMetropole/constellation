@@ -20,6 +20,7 @@
 package org.constellation.ws.embedded;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -142,7 +143,7 @@ public class OGCRestTest extends AbstractGrizzlyServer implements ApplicationCon
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         File f = new File("derby.log");
         if (f.exists()) {
             f.delete();

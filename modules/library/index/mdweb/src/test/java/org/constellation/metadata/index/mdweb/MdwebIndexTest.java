@@ -92,7 +92,7 @@ public class MdwebIndexTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         File configDirectory      = new File("MDwebIndexTest");
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
 
         final String url = "jdbc:derby:memory:MDITest;create=true";
         ds = new DefaultDataSource(url);
@@ -134,7 +134,7 @@ public class MdwebIndexTest {
         if (ds != null) {
             ds.shutdown();
         }
-        FileUtilities.deleteDirectory(new File("MDwebIndexTest"));
+        FileUtilities.deleteDirectory(Paths.get("MDwebIndexTest"));
         File f = new File("derby.log");
         if (f.exists()) {
             f.delete();

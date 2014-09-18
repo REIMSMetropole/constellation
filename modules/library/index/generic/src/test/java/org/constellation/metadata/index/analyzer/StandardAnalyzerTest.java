@@ -61,7 +61,7 @@ public class StandardAnalyzerTest extends AbstractAnalyzerTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
         List<Object> object = fillTestData();
         GenericIndexer indexer = new GenericIndexer(object, null, configDirectory, "", new StandardAnalyzer(Version.LUCENE_4_9), Level.FINER, true);
         indexer.destroy();
@@ -72,7 +72,7 @@ public class StandardAnalyzerTest extends AbstractAnalyzerTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
         indexSearcher.destroy();
     }
 

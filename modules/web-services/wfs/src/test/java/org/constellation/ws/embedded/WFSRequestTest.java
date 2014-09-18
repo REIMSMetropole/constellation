@@ -74,6 +74,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -409,7 +410,7 @@ public class WFSRequestTest extends AbstractGrizzlyServer implements Application
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WFSRequestTest");
         File f = new File("derby.log");
         if (f.exists()) {

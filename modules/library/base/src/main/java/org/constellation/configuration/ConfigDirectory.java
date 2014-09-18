@@ -28,6 +28,7 @@ import javax.naming.Reference;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -635,14 +636,14 @@ public final class ConfigDirectory {
         return value;
     }
 
-    public static File setupTestEnvironement(final String directoryName) {
+    public static File setupTestEnvironement(final String directoryName) throws IOException {
         final File configDir     = new File(directoryName);
         final File configDataDir = new File(directoryName + "-data");
         if (configDir.exists()) {
-            FileUtilities.deleteDirectory(configDir);
+            FileUtilities.deleteDirectory(configDir.toPath());
         }
         if (configDataDir.exists()) {
-            FileUtilities.deleteDirectory(configDataDir);
+            FileUtilities.deleteDirectory(configDataDir.toPath());
         }
         configDir.mkdir();
         configDataDir.mkdir();
@@ -652,9 +653,9 @@ public final class ConfigDirectory {
         return configDir;
     }
 
-    public static void shutdownTestEnvironement(final String directoryName) {
-        FileUtilities.deleteDirectory(new File(directoryName));
-        FileUtilities.deleteDirectory(new File(directoryName+ "-data"));
+    public static void shutdownTestEnvironement(final String directoryName) throws IOException {
+        FileUtilities.deleteDirectory(Paths.get(directoryName));
+        FileUtilities.deleteDirectory(Paths.get(directoryName+ "-data"));
         setConfigDirectory(null);
         setDataDirectory(null);
     }

@@ -137,7 +137,7 @@ public class SOSSoapRequestTest extends AbstractGrizzlyServer implements Applica
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("SOSSoapRequestTest");
         if (ds != null) {
             ds.shutdown();

@@ -41,6 +41,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -108,7 +109,7 @@ public class WPSRequestTest extends AbstractGrizzlyServer implements Application
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WPSRequestTest");
         finish();
     }

@@ -57,7 +57,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 /**
- * {@link org.constellation.configuration.ServiceConfigurer} implementation for CSW service.
+ * implementation for CSW service.
  *
  * TODO: implement specific configuration methods
  *
@@ -111,7 +111,7 @@ public class CSWConfigurer extends OGCConfigurer {
      * @param id The service identifier.
      *
      * @return
-     * @throws CstlServiceException
+     * @throws ConfigurationException
      */
     private AcknowlegementType refreshIndex(final boolean asynchrone, final String id) throws ConfigurationException {
         String suffix = "";
@@ -288,9 +288,7 @@ public class CSWConfigurer extends OGCConfigurer {
             final List<File> files;
             if (fileName.endsWith("zip")) {
                 try  {
-                    final FileInputStream fis = new FileInputStream(f);
-                    files = FileUtilities.unZipFileList(fis);
-                    fis.close();
+                    files = FileUtilities.unzip(f.toPath(),null);
                 } catch (IOException ex) {
                     throw new ConfigurationException(ex);
                 }
@@ -469,7 +467,7 @@ public class CSWConfigurer extends OGCConfigurer {
      *
      * TODO maybe we can directly recreate the index here (fusion of synchrone/asynchrone)
      *
-     * @param configurationDirectory The CSW configuration directory.
+     * @param cswInstanceDirectories The CSW configuration directories.
      *
      * @throws org.constellation.ws.CstlServiceException
      */
@@ -480,9 +478,13 @@ public class CSWConfigurer extends OGCConfigurer {
             for (File indexDir : cswInstanceDirectory.listFiles(new IndexDirectoryFilter(null))) {
                 deleted = true;
                 for (File f : indexDir.listFiles()) {
-                    final boolean sucess;
+                    boolean sucess= true;
                     if (f.isDirectory()) {
-                        sucess = FileUtilities.deleteDirectory(f);
+                        try {
+                           FileUtilities.deleteDirectory(f.toPath());
+                        } catch (IOException e) {
+                            sucess = false;
+                        }
                     } else {
                         sucess = f.delete();
                     }
@@ -497,7 +499,11 @@ public class CSWConfigurer extends OGCConfigurer {
             //hack for FS CSW
             final File f = new File(cswInstanceDirectory, "csw-db");
             if (f.isDirectory() && deleteFileIndexDb) {
-                FileUtilities.deleteDirectory(f);
+                try {
+                    FileUtilities.deleteDirectory(f.toPath());
+                } catch (IOException e) {
+                    throw new ConfigurationException("can't delete csw database directory",e);
+                }
             }
         }
 
@@ -513,8 +519,7 @@ public class CSWConfigurer extends OGCConfigurer {
      * Build a new Index in a new folder.
      * This index will be used at the next restart of the server.
      *
-     * @param id The service identifier.
-     * @param configurationDirectory  The CSW configuration directory.
+     * @param cswInstanceDirectories  The CSW configuration directories.
      *
      * @throws org.constellation.ws.CstlServiceException
      */

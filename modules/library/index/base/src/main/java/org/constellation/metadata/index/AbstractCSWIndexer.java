@@ -99,7 +99,7 @@ public abstract class AbstractCSWIndexer<A> extends AbstractIndexer<A> {
      * @param configDirectory The directory where the files of the index will be stored.
      * @param additionalQueryable A map of additional queryable elements.
      */
-    public AbstractCSWIndexer(final String indexID, final File configDirectory, final Map<String, List<String>> additionalQueryable) {
+    public AbstractCSWIndexer(final String indexID, final File configDirectory, final Map<String, List<String>> additionalQueryable) throws IndexingException {
         super(indexID, configDirectory);
         if (additionalQueryable != null) {
             this.additionalQueryable = additionalQueryable;
@@ -116,7 +116,7 @@ public abstract class AbstractCSWIndexer<A> extends AbstractIndexer<A> {
      * @param analyzer A lucene analyzer used in text values indexation (default is ClassicAnalyzer).
      * @param additionalQueryable  A map of additional queryable elements.
      */
-    public AbstractCSWIndexer(String indexID, File configDirectory, Analyzer analyzer, Map<String, List<String>> additionalQueryable) {
+    public AbstractCSWIndexer(String indexID, File configDirectory, Analyzer analyzer, Map<String, List<String>> additionalQueryable) throws IndexingException {
         super(indexID, configDirectory, analyzer);
         if (additionalQueryable != null) {
             this.additionalQueryable = additionalQueryable;
@@ -324,7 +324,7 @@ public abstract class AbstractCSWIndexer<A> extends AbstractIndexer<A> {
      * @param srid the coordinate reference system SRID
      *
      * @return true if the indexation succeed
-     * @throws MD_IOException
+     * @throws org.geotoolkit.lucene.IndexingException
      */
     private boolean indexSpatialPart(Document doc, A form, Map<String, List<String>> queryableSet, int srid) throws IndexingException {
 

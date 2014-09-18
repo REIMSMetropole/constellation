@@ -46,6 +46,7 @@ import org.springframework.test.context.ContextConfiguration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.bind.Marshaller;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +95,7 @@ public class WMTSWorkerTest implements ApplicationContextAware {
             worker.setLogLevel(Level.FINER);
             worker.setServiceUrl("http://geomatys.com/constellation/WS/");
             worker.setShiroAccessible(false);
-        } catch (ConfigurationException ex) {
+        } catch (ConfigurationException|IOException ex) {
             Logger.getLogger(WMTSWorkerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

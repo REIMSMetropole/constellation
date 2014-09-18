@@ -20,6 +20,7 @@
 package org.constellation.map.ws.rs;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -127,7 +128,7 @@ public class WMSServiceTest implements ApplicationContextAware {
     private static boolean localdb_active = true;
     
     @BeforeClass
-    public static void start() {
+    public static void start() throws IOException {
         ConfigDirectory.setupTestEnvironement("WMSServiceTest");
     }
     
@@ -222,7 +223,7 @@ public class WMSServiceTest implements ApplicationContextAware {
     }
     
     @AfterClass
-    public static void finish() {
+    public static void finish() throws IOException {
         service.destroy();
         ConfigDirectory.shutdownTestEnvironement("WMSServiceTest");
     }

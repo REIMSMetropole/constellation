@@ -112,8 +112,10 @@ import javax.measure.converter.UnitConverter;
 import javax.measure.unit.Unit;
 import javax.xml.bind.JAXBException;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -411,10 +413,12 @@ public class WPSWorker extends AbstractWorker {
         //Delete recursively temporary directory.
         if (isTmpWebDav) {
             try {
-                FileUtilities.deleteDirectory(new File(webdavFolderPath));
+                FileUtilities.deleteDirectory(Paths.get(webdavFolderPath));
                 serviceBusiness.delete("webdav", webdavName);
             } catch (ConfigurationException ex) {
                 LOGGER.log(Level.WARNING, "Erro while deleting temporary webdav service", ex);
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Erro while deleting temporary webdav service", e);
             }
         }
     }

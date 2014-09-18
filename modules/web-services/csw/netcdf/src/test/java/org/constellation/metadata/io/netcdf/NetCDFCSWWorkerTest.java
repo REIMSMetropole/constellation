@@ -124,7 +124,7 @@ public class NetCDFCSWWorkerTest extends CSWworkerTest {
         deleteTemporaryFile();
     }
 
-    public static void deleteTemporaryFile() {
+    public static void deleteTemporaryFile() throws IOException {
         if (worker != null) {
             worker.destroy();
         }

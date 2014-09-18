@@ -21,6 +21,7 @@
 package org.constellation.metadata;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -132,7 +133,7 @@ public class InternalCSWworkerTest extends CSWworkerTest {
         deleteTemporaryFile();
     }
 
-    public static void deleteTemporaryFile() {
+    public static void deleteTemporaryFile() throws IOException {
         if (worker != null) {
             worker.destroy();
         }

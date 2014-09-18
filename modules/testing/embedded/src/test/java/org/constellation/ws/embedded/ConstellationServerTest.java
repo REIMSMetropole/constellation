@@ -43,6 +43,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -141,7 +142,7 @@ public class ConstellationServerTest extends AbstractGrizzlyServer implements Ap
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         File f = new File("derby.log");
         if (f.exists()) {
             f.delete();

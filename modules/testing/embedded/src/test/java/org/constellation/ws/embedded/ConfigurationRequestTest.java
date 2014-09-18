@@ -157,7 +157,7 @@ public class ConfigurationRequestTest extends AbstractGrizzlyServer implements A
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         File f = new File("derby.log");
         if (f.exists()) {
             f.delete();

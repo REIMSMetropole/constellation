@@ -33,6 +33,7 @@ import org.opengis.parameter.ParameterValueGroup;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
@@ -62,7 +63,7 @@ public abstract class AbstractProviderTest extends AbstractProcessTest {
     }
 
     @BeforeClass
-    public static void initFolder() throws MalformedURLException {
+    public static void initFolder() throws IOException {
 
         final File configDirectory = ConfigDirectory.setupTestEnvironement("ProcessProviderTest");
         final File providerDirectory = new File(configDirectory, "provider");
@@ -74,7 +75,7 @@ public abstract class AbstractProviderTest extends AbstractProcessTest {
     }
 
     @AfterClass
-    public static void destroyFolder() {
+    public static void destroyFolder() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("ProcessProviderTest");
     }
 

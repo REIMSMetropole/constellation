@@ -98,7 +98,7 @@ public class MdwebRecordIndexTest {
     public static void setUpClass() throws Exception {
         configDirectory = new File("config-test");
         if (configDirectory.exists()) {
-            FileUtilities.deleteDirectory(configDirectory);
+            FileUtilities.deleteDirectory(configDirectory.toPath());
         }
         configDirectory.mkdir();
 
@@ -137,7 +137,7 @@ public class MdwebRecordIndexTest {
     public static void tearDownClass() throws Exception {
         configDirectory = new File("config-test");
         if (configDirectory.exists()) {
-            FileUtilities.deleteDirectory(configDirectory);
+            FileUtilities.deleteDirectory(configDirectory.toPath());
         }
         ds.shutdown();
         File f = new File("derby.log");

@@ -165,7 +165,7 @@ public class WMSAxesOrderTest extends AbstractGrizzlyServer  implements Applicat
     private static boolean localdb_active = true;
     
     @BeforeClass
-    public static void startup() {
+    public static void startup() throws IOException {
         ConfigDirectory.setupTestEnvironement("WMSAxesOrderTest");
     }
     
@@ -249,7 +249,7 @@ public class WMSAxesOrderTest extends AbstractGrizzlyServer  implements Applicat
      * Free some resources.
      */
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WMSAxesOrderTest");
         File f = new File("derby.log");
         if (f.exists()) {

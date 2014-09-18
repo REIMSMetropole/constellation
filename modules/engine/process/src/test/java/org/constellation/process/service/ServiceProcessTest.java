@@ -29,6 +29,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -53,13 +54,13 @@ public abstract class ServiceProcessTest extends AbstractProcessTest {
     }
 
     @BeforeClass
-    public static void setEnvironement() {
+    public static void setEnvironement() throws IOException {
         configName = UUID.randomUUID().toString();
         ConfigDirectory.setupTestEnvironement(configName);
     }
 
     @AfterClass
-    public static void destroyFolder() {
+    public static void destroyFolder() throws IOException {
         WSEngine.destroyInstances(serviceName);
         ConfigDirectory.shutdownTestEnvironement(configName);
     }

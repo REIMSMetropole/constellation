@@ -54,6 +54,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class AdminRequestTest extends AbstractGrizzlyServer  implements Applicat
     private static boolean initialized = false;
     
     @BeforeClass
-    public static void startup() {
+    public static void startup() throws IOException {
         ConfigDirectory.setupTestEnvironement("AdminRequestTest");
     }
     
@@ -187,7 +188,7 @@ public class AdminRequestTest extends AbstractGrizzlyServer  implements Applicat
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         File f = new File("derby.log");
         if (f.exists()) {
             f.delete();

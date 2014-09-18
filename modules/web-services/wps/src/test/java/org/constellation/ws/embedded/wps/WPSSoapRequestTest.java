@@ -102,7 +102,7 @@ public class WPSSoapRequestTest extends AbstractGrizzlyServer implements Applica
     }
 
     @AfterClass
-    public static void shutdown() {
+    public static void shutdown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WPSSoapRequestTest");
         finish();
     }

@@ -107,9 +107,7 @@ public class SOSConfigurer extends OGCConfigurer {
         switch (type) {
             case "zip":
                 try  {
-                    final FileInputStream fis = new FileInputStream(sensorFile);
-                    files = FileUtilities.unZipFileList(fis);
-                    fis.close();
+                    files = FileUtilities.unzip(sensorFile.toPath(),null);
                 } catch (IOException ex) {
                     throw new ConfigurationException(ex);
                 }   break;

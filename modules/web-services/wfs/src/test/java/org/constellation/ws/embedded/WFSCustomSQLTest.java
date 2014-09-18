@@ -52,6 +52,7 @@ import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.namespace.QName;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
@@ -263,7 +264,7 @@ public class WFSCustomSQLTest extends AbstractGrizzlyServer implements Applicati
     }
 
     @AfterClass
-    public static void shutDown() {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WFSCustomSQLTest");
         DataProviders.getInstance().setConfigurator(Providers.DEFAULT_CONFIGURATOR);
         File f = new File("derby.log");

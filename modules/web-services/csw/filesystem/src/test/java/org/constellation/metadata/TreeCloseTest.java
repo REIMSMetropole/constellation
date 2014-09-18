@@ -50,6 +50,7 @@ import javax.inject.Inject;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -136,7 +137,7 @@ public class TreeCloseTest implements ApplicationContextAware {
         deleteTemporaryFile();
     }
 
-    public static void deleteTemporaryFile() {
+    public static void deleteTemporaryFile() throws IOException {
         if (worker != null) {
             worker.destroy();
         }

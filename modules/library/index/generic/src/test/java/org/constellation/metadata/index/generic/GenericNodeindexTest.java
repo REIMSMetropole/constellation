@@ -94,7 +94,7 @@ public class GenericNodeindexTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
 
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
         List<Node> object         = fillTestData();
         indexer                   = new NodeIndexer(object, null, configDirectory, "", true);
         indexSearcher             = new LuceneIndexSearcher(configDirectory, "", null, true);
@@ -105,7 +105,7 @@ public class GenericNodeindexTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
         indexer.destroy();
         indexSearcher.destroy();
     }

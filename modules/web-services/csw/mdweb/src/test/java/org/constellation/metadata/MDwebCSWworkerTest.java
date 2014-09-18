@@ -164,8 +164,8 @@ public class MDwebCSWworkerTest extends CSWworkerTest {
         if (worker != null) {
             worker.destroy();
         }
-        FileUtilities.deleteDirectory(dbDirectory);
-        FileUtilities.deleteDirectory(dbTHDirectory);
+        FileUtilities.deleteDirectory(dbDirectory.toPath());
+        FileUtilities.deleteDirectory(dbTHDirectory.toPath());
         File derbyLog = new File("derby.log");
         if (derbyLog.exists()) {
             derbyLog.delete();

@@ -340,7 +340,11 @@ public class ServiceBusiness implements IServiceBusiness {
             // delete folder
             final File instanceDir = ConfigDirectory.getInstanceDirectory(serviceType, identifier);
             if (instanceDir.isDirectory()) {
-                FileUtilities.deleteDirectory(instanceDir);
+                try {
+                    FileUtilities.deleteDirectory(instanceDir.toPath());
+                } catch (IOException e) {
+                    throw new ConfigurationException("can't delete :" + identifier + " service", e);
+                }
             }
         } else {
             throw new ConfigurationException("There is no instance:" + identifier + " to delete");

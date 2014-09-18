@@ -101,7 +101,7 @@ public class GenericindexTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
 
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
         List<Object> object       = fillTestData();
         indexer                   = new GenericIndexer(object, null, configDirectory, "", true);
         indexSearcher             = new LuceneIndexSearcher(configDirectory, "", null, true);
@@ -112,7 +112,7 @@ public class GenericindexTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        FileUtilities.deleteDirectory(configDirectory);
+        FileUtilities.deleteDirectory(configDirectory.toPath());
         indexer.destroy();
         indexSearcher.destroy();
     }

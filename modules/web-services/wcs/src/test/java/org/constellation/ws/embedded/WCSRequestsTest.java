@@ -20,6 +20,7 @@ package org.constellation.ws.embedded;
 
 // J2SE dependencies
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -231,7 +232,7 @@ public class WCSRequestsTest extends AbstractGrizzlyServer implements Applicatio
     }
 
     @AfterClass
-    public static void shutDown() throws JAXBException {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WCSRequestsTest");
         finish();
     }

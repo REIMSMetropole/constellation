@@ -31,6 +31,7 @@ import org.opengis.parameter.ParameterDescriptorGroup;
 import org.opengis.parameter.ParameterValueGroup;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
@@ -62,7 +63,7 @@ public abstract class AbstractMapStyleTest extends AbstractProcessTest {
     }
 
     @BeforeClass
-    public static void initFolder() throws MalformedURLException {
+    public static void initFolder() throws IOException {
 
         configDirectory = ConfigDirectory.setupTestEnvironement("AbstractMapStyleTest");
 
@@ -75,14 +76,13 @@ public abstract class AbstractMapStyleTest extends AbstractProcessTest {
     }
 
     @AfterClass
-    public static void destroyFolder() {
+    public static void destroyFolder() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("AbstractMapStyleTest");
     }
 
     /**
      *
      *
-     * @param sercice
      * @param providerID
      * @return
      * @throws MalformedURLException

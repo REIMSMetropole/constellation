@@ -445,7 +445,7 @@ public final class GrizzlyServer {
         final File outputDir = new File(tmpDir, "Constellation");
         if (outputDir.exists()) {
             if (outputDir.canWrite()) {
-                if (!FileUtilities.deleteDirectory(outputDir)) {
+                if (!FileUtilities.deleteDirectory(outputDir.toPath())) {
                     LOGGER.log(Level.INFO, "Unable to delete folder {0}", outputDir.getAbsolutePath());
                 }
             } else {

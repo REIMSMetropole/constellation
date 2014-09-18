@@ -75,6 +75,7 @@ import javax.xml.namespace.QName;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -208,7 +209,7 @@ public class WMSRequestsTest extends AbstractGrizzlyServer implements Applicatio
     private static boolean initialized = false;
     
     @BeforeClass
-    public static void startup() {
+    public static void startup() throws IOException {
         ConfigDirectory.setupTestEnvironement("WMSRequestTest");
     }
     
@@ -384,7 +385,7 @@ public class WMSRequestsTest extends AbstractGrizzlyServer implements Applicatio
     }
 
     @AfterClass
-    public static void shutDown() throws JAXBException {
+    public static void shutDown() throws IOException {
         ConfigDirectory.shutdownTestEnvironement("WMSRequestTest");
         finish();
     }

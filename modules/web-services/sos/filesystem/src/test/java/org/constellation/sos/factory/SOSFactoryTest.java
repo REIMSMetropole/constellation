@@ -72,7 +72,7 @@ public class SOSFactoryTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
         if (configurationDirectory.exists()) {
-            FileUtilities.deleteDirectory(configurationDirectory);
+            FileUtilities.deleteDirectory(configurationDirectory.toPath());
         }
     }
 
