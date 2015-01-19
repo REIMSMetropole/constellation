@@ -1,19 +1,19 @@
 package org.constellation.engine.register.jooq.repository;
 
-import org.constellation.engine.register.Data;
-import org.constellation.engine.register.Sensor;
+import static org.constellation.engine.register.jooq.Tables.DATA;
+import static org.constellation.engine.register.jooq.Tables.SENSOR;
+import static org.constellation.engine.register.jooq.Tables.SENSORED_DATA;
+
+import java.util.List;
+
 import org.constellation.engine.register.helper.SensorHelper;
+import org.constellation.engine.register.jooq.tables.pojos.Data;
+import org.constellation.engine.register.jooq.tables.pojos.Sensor;
 import org.constellation.engine.register.jooq.tables.records.SensorRecord;
 import org.constellation.engine.register.repository.SensorRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.constellation.engine.register.jooq.Tables.DATA;
-import static org.constellation.engine.register.jooq.Tables.SENSOR;
-import static org.constellation.engine.register.jooq.Tables.SENSORED_DATA;
 
 @Component
 public class JooqSensorRepository extends AbstractJooqRespository<SensorRecord, Sensor> implements SensorRepository {

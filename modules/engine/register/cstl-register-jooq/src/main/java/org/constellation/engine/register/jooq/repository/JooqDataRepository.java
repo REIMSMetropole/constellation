@@ -18,14 +18,26 @@
  */
 package org.constellation.engine.register.jooq.repository;
 
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-import org.constellation.engine.register.*;
+import static org.constellation.engine.register.jooq.Tables.DATA;
+import static org.constellation.engine.register.jooq.Tables.DATA_I18N;
+import static org.constellation.engine.register.jooq.Tables.DATA_X_CSW;
+import static org.constellation.engine.register.jooq.Tables.DATA_X_DATA;
+import static org.constellation.engine.register.jooq.Tables.DATA_X_DOMAIN;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.constellation.engine.register.helper.DataHelper;
 import org.constellation.engine.register.i18n.DataWithI18N;
 import org.constellation.engine.register.jooq.Tables;
+import org.constellation.engine.register.jooq.tables.DataXData;
+import org.constellation.engine.register.jooq.tables.pojos.Data;
+import org.constellation.engine.register.jooq.tables.pojos.DataI18n;
+import org.constellation.engine.register.jooq.tables.pojos.DataXCsw;
+import org.constellation.engine.register.jooq.tables.pojos.Domain;
 import org.constellation.engine.register.jooq.tables.records.DataRecord;
+import org.constellation.engine.register.jooq.tables.records.DataXCswRecord;
 import org.constellation.engine.register.jooq.tables.records.DataXDataRecord;
 import org.constellation.engine.register.repository.DataRepository;
 import org.constellation.engine.register.repository.DomainRepository;
@@ -34,16 +46,12 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.constellation.engine.register.jooq.tables.records.DataXCswRecord;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.constellation.engine.register.jooq.Tables.*;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 @Component
 public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data> implements DataRepository {
@@ -164,16 +172,16 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
                 .set(DATA.NAMESPACE, data.getNamespace())
                 .set(DATA.OWNER, data.getOwner())
                 .set(DATA.PROVIDER, data.getProvider())
-                .set(DATA.SENSORABLE, data.isSensorable())
+                .set(DATA.SENSORABLE, data.getSensorable())
                 .set(DATA.SUBTYPE, data.getSubtype())
                 .set(DATA.TYPE, data.getType())
-                .set(DATA.INCLUDED, data.isIncluded())
+                .set(DATA.INCLUDED, data.getIncluded())
                 .set(DATA.DATASET_ID, data.getDatasetId())
                 .set(DATA.FEATURE_CATALOG, data.getFeatureCatalog())
                 .set(DATA.STATS_RESULT, data.getStatsResult())
                 .set(DATA.STATS_STATE, data.getStatsState())
-                .set(DATA.RENDERED, data.isRendered())
-                .set(DATA.HIDDEN, data.isHidden())
+                .set(DATA.RENDERED, data.getRendered())
+                .set(DATA.HIDDEN, data.getHidden())
                 .set(DATA.MD_COMPLETION,data.getMdCompletion())
                 .where(DATA.ID.eq(data.getId()))
                 .execute();

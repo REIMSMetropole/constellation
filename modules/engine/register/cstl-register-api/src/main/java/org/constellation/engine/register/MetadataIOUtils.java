@@ -1,14 +1,15 @@
 package org.constellation.engine.register;
 
-import org.apache.sis.metadata.iso.DefaultMetadata;
-import org.constellation.utils.ISOMarshallerPool;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+
+import org.apache.sis.metadata.iso.DefaultMetadata;
+import org.constellation.utils.ISOMarshallerPool;
 
 public class MetadataIOUtils {
     public static DefaultMetadata unmarshallMetadata(final String xml) throws JAXBException {

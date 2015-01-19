@@ -19,10 +19,12 @@
 
 package org.constellation.engine.register.jooq.repository;
 
-import java.util.List;
-import org.constellation.engine.register.ChainProcess;
-import org.constellation.engine.register.helper.ChainProcessHelper;
 import static org.constellation.engine.register.jooq.Tables.CHAIN_PROCESS;
+
+import java.util.List;
+
+import org.constellation.engine.register.helper.ChainProcessHelper;
+import org.constellation.engine.register.jooq.tables.pojos.ChainProcess;
 import org.constellation.engine.register.jooq.tables.records.ChainProcessRecord;
 import org.constellation.engine.register.repository.ChainProcessRepository;
 import org.springframework.stereotype.Component;

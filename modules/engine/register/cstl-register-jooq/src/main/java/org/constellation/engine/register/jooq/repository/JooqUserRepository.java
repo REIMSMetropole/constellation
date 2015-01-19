@@ -18,16 +18,25 @@
  */
 package org.constellation.engine.register.jooq.repository;
 
-import com.google.common.base.Optional;
+import static org.constellation.engine.register.jooq.Tables.CSTL_USER;
+import static org.constellation.engine.register.jooq.Tables.USER_X_DOMAIN_X_DOMAINROLE;
+import static org.constellation.engine.register.jooq.Tables.USER_X_ROLE;
 
-import org.constellation.engine.register.CstlUser;
-import org.constellation.engine.register.Domain;
+import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.constellation.engine.register.DomainUser;
-import org.constellation.engine.register.Domainrole;
 import org.constellation.engine.register.helper.CstlUserHelper;
 import org.constellation.engine.register.jooq.Tables;
 import org.constellation.engine.register.jooq.tables.UserXDomainXDomainrole;
 import org.constellation.engine.register.jooq.tables.UserXRole;
+import org.constellation.engine.register.jooq.tables.pojos.CstlUser;
+import org.constellation.engine.register.jooq.tables.pojos.Domain;
+import org.constellation.engine.register.jooq.tables.pojos.Domainrole;
 import org.constellation.engine.register.jooq.tables.records.CstlUserRecord;
 import org.constellation.engine.register.jooq.tables.records.UserXRoleRecord;
 import org.constellation.engine.register.repository.DomainRepository;
@@ -39,7 +48,6 @@ import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.SelectConditionStep;
-import org.jooq.SelectJoinStep;
 import org.jooq.UpdateConditionStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,16 +56,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import static org.constellation.engine.register.jooq.Tables.CSTL_USER;
-import static org.constellation.engine.register.jooq.Tables.USER_X_DOMAIN_X_DOMAINROLE;
-import static org.constellation.engine.register.jooq.Tables.USER_X_ROLE;
+import com.google.common.base.Optional;
 
 public class JooqUserRepository extends AbstractJooqRespository<CstlUserRecord, CstlUser> implements UserRepository {
 

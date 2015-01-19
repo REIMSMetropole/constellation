@@ -18,8 +18,35 @@
  */
 package org.constellation.admin;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.quartz.impl.matchers.EverythingMatcher.allJobs;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.inject.Inject;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLStreamException;
+
 import org.apache.sis.metadata.iso.DefaultIdentifier;
 import org.apache.sis.metadata.iso.citation.DefaultCitation;
 import org.apache.sis.metadata.iso.identification.DefaultServiceIdentification;
@@ -27,9 +54,9 @@ import org.constellation.admin.exception.ConstellationException;
 import org.constellation.api.TaskState;
 import org.constellation.business.IProcessBusiness;
 import org.constellation.configuration.ConfigurationException;
-import org.constellation.engine.register.ChainProcess;
-import org.constellation.engine.register.Task;
-import org.constellation.engine.register.TaskParameter;
+import org.constellation.engine.register.jooq.tables.pojos.ChainProcess;
+import org.constellation.engine.register.jooq.tables.pojos.Task;
+import org.constellation.engine.register.jooq.tables.pojos.TaskParameter;
 import org.constellation.engine.register.repository.ChainProcessRepository;
 import org.constellation.engine.register.repository.TaskParameterRepository;
 import org.constellation.engine.register.repository.TaskRepository;
@@ -69,43 +96,15 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLStreamException;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.math.BigInteger;
-import java.nio.file.Path;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.UUID;
-
-import static org.quartz.impl.matchers.EverythingMatcher.allJobs;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -450,34 +449,34 @@ public class ProcessBusiness implements IProcessBusiness {
      * @return task object
      */
     @Override
-    public org.constellation.engine.register.Task getTask(String uuid) {
+    public Task getTask(String uuid) {
         return taskRepository.get(uuid);
     }
 
     @Override
     @Transactional
-    public Task addTask(org.constellation.engine.register.Task task) throws ConstellationException {
+    public Task addTask(Task task) throws ConstellationException {
         return taskRepository.create(task);
     }
 
     @Override
     @Transactional
-    public void updateTask(org.constellation.engine.register.Task task) throws ConstellationException {
+    public void updateTask(Task task) throws ConstellationException {
         taskRepository.update(task);
     }
 
     @Override
-    public List<org.constellation.engine.register.Task> listRunningTasks() {
+    public List<Task> listRunningTasks() {
         return taskRepository.findRunningTasks();
     }
 
     @Override
-    public List<org.constellation.engine.register.Task> listRunningTasks(Integer id, Integer offset, Integer limit) {
+    public List<Task> listRunningTasks(Integer id, Integer offset, Integer limit) {
         return taskRepository.findRunningTasks(id, offset, limit);
     }
 
     @Override
-    public List<org.constellation.engine.register.Task> listTaskHistory(Integer id, Integer offset, Integer limit) {
+    public List<Task> listTaskHistory(Integer id, Integer offset, Integer limit) {
         return taskRepository.taskHistory(id, offset, limit);
     }
 
@@ -522,7 +521,11 @@ public class ProcessBusiness implements IProcessBusiness {
         } catch (JAXBException ex) {
             throw new ConstellationException("Unable to marshall chain configuration",ex);
         }
-        final ChainProcess process = new ChainProcess("constellation", code, config);
+        //TODO FIXME final ChainProcess process = new ChainProcess("constellation", code, config);
+        final ChainProcess process = new ChainProcess();
+        process.setAuth("constellation");
+        process.setCode(code);
+        process.setConfig(config);
         chainRepository.create(process);
     }
 

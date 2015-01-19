@@ -18,20 +18,17 @@
  */
 package org.constellation.engine.register.jooq.repository;
 
-import org.constellation.engine.register.TaskParameter;
-import org.constellation.engine.register.helper.TaskParameterHelper;
-import org.constellation.engine.register.jooq.tables.records.TaskParameterRecord;
-import org.constellation.engine.register.repository.TaskParameterRepository;
-import org.constellation.engine.register.jooq.Tables;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.constellation.engine.register.jooq.Tables.DOMAIN;
+import org.constellation.engine.register.helper.TaskParameterHelper;
+import org.constellation.engine.register.jooq.Tables;
+import org.constellation.engine.register.jooq.tables.pojos.TaskParameter;
+import org.constellation.engine.register.jooq.tables.records.TaskParameterRecord;
+import org.constellation.engine.register.repository.TaskParameterRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Thomas Rouby (Geomatys)

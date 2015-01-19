@@ -47,12 +47,12 @@ import org.constellation.configuration.StyleBrief;
 import org.constellation.configuration.StyleReport;
 import org.constellation.configuration.TargetNotFoundException;
 import org.constellation.dto.StyleBean;
-import org.constellation.engine.register.Data;
-import org.constellation.engine.register.Layer;
-import org.constellation.engine.register.Provider;
-import org.constellation.engine.register.Service;
-import org.constellation.engine.register.Style;
-import org.constellation.engine.register.CstlUser;
+import org.constellation.engine.register.jooq.tables.pojos.CstlUser;
+import org.constellation.engine.register.jooq.tables.pojos.Data;
+import org.constellation.engine.register.jooq.tables.pojos.Layer;
+import org.constellation.engine.register.jooq.tables.pojos.Provider;
+import org.constellation.engine.register.jooq.tables.pojos.Service;
+import org.constellation.engine.register.jooq.tables.pojos.Style;
 import org.constellation.engine.register.repository.DataRepository;
 import org.constellation.engine.register.repository.LayerRepository;
 import org.constellation.engine.register.repository.ProviderRepository;
@@ -82,9 +82,9 @@ import org.opengis.style.TextSymbolizer;
 import org.opengis.util.FactoryException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Optional;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Bernard Fabien (Geomatys)
@@ -524,8 +524,11 @@ public class StyleBusiness implements IStyleBusiness {
                     return input.getId();
                 }
             }).orNull();
-            final Style newStyle = new Style(styleName, provider.getId(), getTypeFromMutableStyle(style), new Date().getTime(),
-                    sw.toString(), userId);
+            //FIXME jooq-powa final Style newStyle = new Style(styleName, provider.getId(), getTypeFromMutableStyle(style), new Date().getTime(),
+//                    sw.toString(), userId);
+            
+            Style newStyle = new Style();
+            
             styleRepository.create(newStyle);
         }
     }

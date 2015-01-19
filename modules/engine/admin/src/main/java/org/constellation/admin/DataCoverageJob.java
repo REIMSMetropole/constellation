@@ -18,17 +18,22 @@
  */
 package org.constellation.admin;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import static org.geotoolkit.parameter.Parameters.value;
+import static org.geotoolkit.process.coverage.statistics.StatisticsDescriptor.OUTCOVERAGE;
+
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
+
 import org.apache.sis.storage.DataStore;
 import org.apache.sis.util.logging.Logging;
 import org.constellation.admin.util.ImageStatisticSerializer;
 import org.constellation.api.DataType;
 import org.constellation.business.IDataCoverageJob;
-import org.constellation.engine.register.Data;
-import org.constellation.engine.register.Provider;
+import org.constellation.engine.register.jooq.tables.pojos.Data;
+import org.constellation.engine.register.jooq.tables.pojos.Provider;
 import org.constellation.engine.register.repository.DataRepository;
 import org.constellation.engine.register.repository.ProviderRepository;
 import org.constellation.provider.DataProvider;
@@ -57,6 +62,10 @@ import org.geotoolkit.metadata.ImageStatistics;
 
 import static org.geotoolkit.parameter.Parameters.value;
 import static org.geotoolkit.process.coverage.statistics.StatisticsDescriptor.OUTCOVERAGE;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
 
 /**
  *
@@ -103,7 +112,7 @@ public class DataCoverageJob implements IDataCoverageJob {
         }
         try {
             if (DataType.COVERAGE.name().equals(data.getType())
-                    && (data.isRendered() == null || !data.isRendered())
+                    && (data.getRendered() == null || !data.getRendered())
                     && data.getStatsState() == null) {
                 LOGGER.log(Level.INFO, "Start computing data " + dataId + " "+data.getName()+" coverage statistics.");
 
@@ -152,7 +161,7 @@ public class DataCoverageJob implements IDataCoverageJob {
                 // forward original data statistic result and state to pyramid conform child.
                 final List<Data> dataChildren = dataRepository.getDataLinkedData(data.getId());
                 for (Data dataChild : dataChildren) {
-                    if (dataChild.getSubtype().equalsIgnoreCase("pyramid") && !dataChild.isRendered()) {
+                    if (dataChild.getSubtype().equalsIgnoreCase("pyramid") && !dataChild.getRendered()) {
                         dataChild.setStatsResult(data.getStatsResult());
                         dataChild.setStatsState(data.getStatsState());
                         dataRepository.update(dataChild);

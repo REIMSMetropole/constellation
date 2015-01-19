@@ -24,7 +24,7 @@ import org.constellation.configuration.ConfigurationException;
 import org.constellation.configuration.Instance;
 import org.constellation.configuration.ServiceStatus;
 import org.constellation.dto.Details;
-import org.constellation.engine.register.Service;
+
 
 import java.util.List;
 import java.util.Map;
@@ -47,7 +47,7 @@ public interface IServiceBusiness {
 
     void delete(String serviceType, String identifier) throws ConfigurationException;
 
-    Service ensureExistingInstance(String spec, String identifier) throws ConfigurationException;
+    org.constellation.engine.register.jooq.tables.pojos.Service ensureExistingInstance(String spec, String identifier) throws ConfigurationException;
 
     Object getConfiguration(String serviceType, String identifier) throws ConfigurationException;
 
@@ -71,7 +71,7 @@ public interface IServiceBusiness {
      * @param id The name of the service to return.
      * @return A service of the queried type matching input name, or null if we cannot find any.
      */
-    Service getServiceByIdentifierAndType(String type, String id);
+    org.constellation.engine.register.jooq.tables.pojos.Service getServiceByIdentifierAndType(String type, String id);
 
     Details getInstanceDetails(String service, String id, String language) throws ConfigurationException;
 

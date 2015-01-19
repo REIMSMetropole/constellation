@@ -19,10 +19,20 @@
 
 package org.constellation.admin;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -31,7 +41,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.google.common.base.Optional;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.sis.metadata.iso.DefaultMetadata;
 import org.apache.sis.storage.DataStoreException;
@@ -47,10 +56,10 @@ import org.constellation.business.IDatasetBusiness;
 import org.constellation.configuration.ConfigDirectory;
 import org.constellation.configuration.ConfigurationException;
 import org.constellation.configuration.TargetNotFoundException;
-import org.constellation.engine.register.CstlUser;
-import org.constellation.engine.register.Data;
-import org.constellation.engine.register.Dataset;
-import org.constellation.engine.register.Provider;
+import org.constellation.engine.register.jooq.tables.pojos.CstlUser;
+import org.constellation.engine.register.jooq.tables.pojos.Data;
+import org.constellation.engine.register.jooq.tables.pojos.Dataset;
+import org.constellation.engine.register.jooq.tables.pojos.Provider;
 import org.constellation.engine.register.repository.DataRepository;
 import org.constellation.engine.register.repository.DatasetRepository;
 import org.constellation.engine.register.repository.ProviderRepository;
@@ -66,6 +75,7 @@ import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.NoSuchIdentifierException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -73,7 +83,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import org.springframework.context.annotation.Profile;
+import com.google.common.base.Optional;
 
 /**
  *
@@ -180,7 +190,14 @@ public class DatasetBusiness extends InternalCSWSynchronizer implements IDataset
     @Override
     @Transactional
     public Dataset createDataset(final String identifier, final String metadataId, final String metadataXml, final Integer owner) {
-        final Dataset ds = new Dataset(identifier, metadataId, metadataXml, owner, System.currentTimeMillis(), null,0);
+        //FIXME check jooq-powa final Dataset ds = new Dataset(identifier, metadataId, metadataXml, owner, System.currentTimeMillis(), null,0);
+        Dataset ds = new Dataset();
+        ds.setIdentifier(identifier);
+        ds.setMetadataId(metadataId);
+        ds.setMetadataIso(metadataXml);
+        ds.setOwner(owner);
+        ds.setDate(System.currentTimeMillis());
+        ds.setMdCompletion(0);
         return datasetRepository.insert(ds);
     }
 
@@ -565,7 +582,7 @@ public class DatasetBusiness extends InternalCSWSynchronizer implements IDataset
                 boolean remove = true;
                 List<Data> providerData = dataRepository.findByProviderId(providerID);
                 for (Data pdata : providerData) {
-                    if (pdata.isIncluded()) {
+                    if (pdata.getIncluded()) {
                         remove = false;
                         break;
                     }

@@ -17,7 +17,13 @@
   <dependencies>
     <dependency>
       <groupId>org.constellation.engine.register</groupId>
-      <artifactId>cstl-register-jooq-generated</artifactId>
+      <artifactId>cstl-register-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.constellation.library</groupId>
+      <artifactId>cstl-lib-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -59,7 +65,7 @@
       <plugin>
         <groupId>com.geomatys.maven</groupId>
         <artifactId>geomatys-jooqhelper-plugin</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
         <dependencies>
           <dependency>
             <groupId>org.constellation.engine</groupId>
@@ -71,11 +77,11 @@
             <artifactId>cstl-register-api</artifactId>
             <version>${project.version}</version>
           </dependency>
-          <dependency>
-            <groupId>org.constellation.engine.register</groupId>
-            <artifactId>cstl-register-jooq-generated</artifactId>
-            <version>${project.version}</version>
-          </dependency>
+<!--           <dependency> -->
+<!--             <groupId>org.constellation.engine.register</groupId> -->
+<!--             <artifactId>cstl-register-jooq-generated</artifactId> -->
+<!--             <version>${project.version}</version> -->
+<!--           </dependency> -->
 
         </dependencies>
         <executions>
@@ -88,7 +94,8 @@
             <configuration>
               <targetSchema>ADMIN</targetSchema>
               <changeLog>cstl/db/db-changelog.xml</changeLog>
-              <pojoPackage>org.constellation.engine.register</pojoPackage>
+              <pojoLocation>../cstl-register-api/target/generated-sources/jooq/org/constellation/engine/register/jooq/tables/</pojoLocation>
+              <pojoPackage>org.constellation.engine.register.jooq.tables.pojos</pojoPackage>
               <targetPackage>org.constellation.engine.register.helper</targetPackage>
               <recordPackage>org.constellation.engine.register.jooq.tables.records</recordPackage>
             </configuration>

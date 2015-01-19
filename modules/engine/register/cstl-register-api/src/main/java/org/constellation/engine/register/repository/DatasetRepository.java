@@ -20,8 +20,9 @@
 package org.constellation.engine.register.repository;
 
 import java.util.List;
-import org.constellation.engine.register.Dataset;
-import org.constellation.engine.register.DatasetXCsw;
+
+import org.constellation.engine.register.jooq.tables.pojos.Dataset;
+import org.constellation.engine.register.jooq.tables.pojos.DatasetXCsw;
 
 /**
  *

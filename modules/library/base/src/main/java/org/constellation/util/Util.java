@@ -19,7 +19,9 @@
 
 package org.constellation.util;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.sis.util.logging.Logging;
+import org.constellation.lib.base.CstlLibBaseRuntimeException;
 import org.geotoolkit.feature.type.DefaultName;
 import org.geotoolkit.feature.type.Name;
 
@@ -27,11 +29,13 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -198,5 +202,15 @@ public final class Util {
         f = f.getParentFile(); // WEB-INF
         f = f.getParentFile(); // webapp root
         return f;
+    }
+    
+    
+    public static <T> T copy(T src, T dst) {
+        try {
+            BeanUtils.copyProperties(dst, src);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new CstlLibBaseRuntimeException(e);
+        }
+        return dst;
     }
 }

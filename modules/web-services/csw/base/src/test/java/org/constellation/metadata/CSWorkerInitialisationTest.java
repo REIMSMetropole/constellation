@@ -21,10 +21,25 @@ package org.constellation.metadata;
 
 // JAXB dependencies
 
+import static org.geotoolkit.ows.xml.OWSExceptionCode.NO_APPLICABLE_CODE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.StringWriter;
+import java.util.logging.Level;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.sis.xml.MarshallerPool;
-import org.constellation.configuration.ConfigDirectory;
 import org.constellation.admin.SpringHelper;
-import org.constellation.engine.register.Service;
+import org.constellation.configuration.ConfigDirectory;
+import org.constellation.engine.register.jooq.tables.pojos.Service;
 import org.constellation.engine.register.repository.ServiceRepository;
 import org.constellation.generic.database.Automatic;
 import org.constellation.generic.database.BDD;
@@ -39,22 +54,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.test.context.ContextConfiguration;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.StringWriter;
-import java.util.logging.Level;
-
-import static org.geotoolkit.ows.xml.OWSExceptionCode.NO_APPLICABLE_CODE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 // JUnit dependencies
@@ -111,7 +112,13 @@ public class CSWorkerInitialisationTest implements ApplicationContextAware {
         /**
          * Test 1: No configuration file.
          */
-        Service service = new Service("default", "csw", System.currentTimeMillis(), null, null, null, null, "NOT_STARTED", "1.0.0");
+        //FIXME jooq-powa Service service = new Service("default", "csw", System.currentTimeMillis(), null, null, null, null, "NOT_STARTED", "1.0.0");
+        Service service = new Service();
+        service.setIdentifier("default");
+        service.setDate(System.currentTimeMillis());
+        service.setType("csw");
+        service.setStatus("NOT_STARTED");
+        service.setVersions("1.0.0");
         int id =  serviceRepository.create(service);
         assertTrue(id > 0);
         

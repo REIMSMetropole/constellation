@@ -21,13 +21,14 @@ package org.constellation.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.constellation.business.IMetadataBusiness;
-import org.constellation.engine.register.Data;
-import org.constellation.engine.register.Dataset;
-import org.constellation.engine.register.DatasetXCsw;
-import org.constellation.engine.register.Service;
+import org.constellation.engine.register.jooq.tables.pojos.Data;
+import org.constellation.engine.register.jooq.tables.pojos.Dataset;
+import org.constellation.engine.register.jooq.tables.pojos.DatasetXCsw;
+import org.constellation.engine.register.jooq.tables.pojos.Service;
 import org.constellation.engine.register.repository.DataRepository;
 import org.constellation.engine.register.repository.DatasetRepository;
 import org.constellation.engine.register.repository.ServiceRepository;
@@ -75,7 +76,7 @@ public class MetadataBusiness implements IMetadataBusiness {
             return dataset.getMetadataIso();
         }
         final Data data = dataRepository.findByMetadataId(metadataId);
-        if (data != null && data.isIncluded()) {
+        if (data != null && data.getIncluded()) {
             return data.getIsoMetadata();
         }
         if (includeService) {
@@ -168,7 +169,7 @@ public class MetadataBusiness implements IMetadataBusiness {
         }
         final List<Data> datas = dataRepository.findAll();
         for (final Data record : datas) {
-            if (record.isIncluded() && record.getIsoMetadata() != null) {
+            if (record.getIncluded() && record.getIsoMetadata() != null) {
                 results.add(record.getMetadataId());
             }
         }
@@ -199,7 +200,7 @@ public class MetadataBusiness implements IMetadataBusiness {
         if (service != null) {
             final List<Data> datas    = dataRepository.getCswLinkedData(service.getId());
             for (Data data : datas) {
-                if (data.getMetadataId() != null && data.isIncluded()) {
+                if (data.getMetadataId() != null && data.getIncluded()) {
                     results.add(data.getMetadataId());
                 }
             }
@@ -209,10 +210,10 @@ public class MetadataBusiness implements IMetadataBusiness {
                 if (ds.getMetadataId() != null) {
                     results.add(ds.getMetadataId());
                 }
-                if (dxc.isAllData()) {
+                if (dxc.getAllData()) {
                     final List<Data> subDatas = dataRepository.findByDatasetId(dxc.getDatasetId());
                     for (Data data : subDatas) {
-                        if (data.getMetadataId() != null && data.isIncluded()) {
+                        if (data.getMetadataId() != null && data.getIncluded()) {
                             results.add(data.getMetadataId());
                         }
                     }

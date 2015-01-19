@@ -93,12 +93,12 @@ import org.constellation.dto.MetadataLists;
 import org.constellation.dto.ParameterValues;
 import org.constellation.dto.ProviderData;
 import org.constellation.dto.SimpleValue;
-import org.constellation.engine.register.CstlUser;
-import org.constellation.engine.register.Dataset;
-import org.constellation.engine.register.Mapcontext;
-import org.constellation.engine.register.MapcontextStyledLayer;
-import org.constellation.engine.register.Provider;
-import org.constellation.engine.register.TaskParameter;
+import org.constellation.engine.register.jooq.tables.pojos.CstlUser;
+import org.constellation.engine.register.jooq.tables.pojos.Dataset;
+import org.constellation.engine.register.jooq.tables.pojos.Mapcontext;
+import org.constellation.engine.register.jooq.tables.pojos.MapcontextStyledLayer;
+import org.constellation.engine.register.jooq.tables.pojos.Provider;
+import org.constellation.engine.register.jooq.tables.pojos.TaskParameter;
 import org.constellation.engine.register.repository.UserRepository;
 import org.constellation.engine.security.WorkspaceService;
 import org.constellation.json.metadata.Template;
@@ -530,8 +530,8 @@ public class DataRest {
                 /**
                  * For each data created in provider, we need to pyramid conform each raster.
                  */
-                final List<org.constellation.engine.register.Data> dataList =  providerBusiness.getDatasFromProviderId(finalProvider.getId());
-                for(final org.constellation.engine.register.Data d : dataList) {
+                final List<org.constellation.engine.register.jooq.tables.pojos.Data> dataList =  providerBusiness.getDatasFromProviderId(finalProvider.getId());
+                for(final org.constellation.engine.register.jooq.tables.pojos.Data d : dataList) {
                     try {
                         final DataBrief db = providerBusiness.createPyramidConform(providerIdentifier, d.getName(),d.getNamespace(), d.getOwner());
                         // link original data with the tiled data.
@@ -974,11 +974,11 @@ public class DataRest {
     public Response findMetadata(@PathParam("domainId") final int domainId, final ParameterValues values) {
         final String search = values.getValues().get("search");
         List<DataBrief> briefs = new ArrayList<>();
-        final List<org.constellation.engine.register.Data> datas;
+        final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas;
         try {
             datas = dataBusiness.searchOnMetadata(search);
             if(datas != null && !datas.isEmpty()){
-                for (org.constellation.engine.register.Data data : datas) {
+                for (org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
                     final QName name = new QName(data.getNamespace(), data.getName());
                     final DataBrief db = dataBusiness.getDataBrief(name, data.getProvider());
                     briefs.add(db);
@@ -1792,12 +1792,12 @@ public class DataRest {
         final List<String> providerIds = providerBusiness.getProviderIds();
         for (final String providerId : providerIds) {
             final Provider provider = providerBusiness.getProvider(providerId);
-            final List<org.constellation.engine.register.Data> datas = providerBusiness.getDatasFromProviderId(provider.getId());
-            for (final org.constellation.engine.register.Data data : datas) {
+            final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas = providerBusiness.getDatasFromProviderId(provider.getId());
+            for (final org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
                 if (type != null && !type.equalsIgnoreCase(data.getType())) {
                     continue;
                 }
-                if (data.isIncluded() && !data.isHidden()) {
+                if (data.getIncluded() && !data.getHidden()) {
                     final QName name = new QName(data.getNamespace(), data.getName());
                     final DataBrief db = dataBusiness.getDataBrief(name, providerId);
                     briefs.add(db);
@@ -1817,9 +1817,9 @@ public class DataRest {
         for (final String providerId : providerIds) {
             final List<DataBrief> briefs = new ArrayList<>();
             final Provider provider = providerBusiness.getProvider(providerId);
-            final List<org.constellation.engine.register.Data> datas = providerBusiness.getDatasFromProviderId(provider.getId());
-            for (final org.constellation.engine.register.Data data : datas) {
-                if (data.isIncluded() && !data.isHidden()) {
+            final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas = providerBusiness.getDatasFromProviderId(provider.getId());
+            for (final org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
+                if (data.getIncluded() && !data.getHidden()) {
                     final QName name = new QName(data.getNamespace(), data.getName());
                     final DataBrief db = dataBusiness.getDataBrief(name, providerId);
                     briefs.add(db);
@@ -1837,10 +1837,10 @@ public class DataRest {
     public Response getDataListsForProviders(@PathParam("providerId") final String providerId) {
         final Provider prov = providerBusiness.getProvider(providerId);
         final List<DataBrief> briefs = new ArrayList<>();
-        final List<org.constellation.engine.register.Data> datas;
+        final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas;
         datas = providerBusiness.getDatasFromProviderId(prov.getId());
-        for (final org.constellation.engine.register.Data data : datas) {
-            if (data.isIncluded() && !data.isHidden()) {
+        for (final org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
+            if (data.getIncluded() && !data.getHidden()) {
                 final QName name = new QName(data.getNamespace(), data.getName());
                 final DataBrief db = dataBusiness.getDataBrief(name, providerId);
                 briefs.add(db);
@@ -1871,13 +1871,13 @@ public class DataRest {
                 // Remove all providers that have a parent
                 continue;
             }
-            final List<org.constellation.engine.register.Data> datas;
+            final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas;
             datas = providerBusiness.getDatasFromProviderId(provider.getId());
-            for (final org.constellation.engine.register.Data data : datas) {
+            for (final org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
                 if (type != null && !data.getType().equals(type)) {
                     continue;
                 }
-                if (data.isIncluded() && !data.isHidden()) {
+                if (data.getIncluded() && !data.getHidden()) {
                     final QName name = new QName(data.getNamespace(), data.getName());
                     final DataBrief db = dataBusiness.getDataBrief(name, providerId);
                     briefs.add(db);
@@ -1901,10 +1901,10 @@ public class DataRest {
                 // Skip all providers that have a parent ie : skip for tiled data to avoid duplication
                 continue;
             }
-            final List<org.constellation.engine.register.Data> datas;
+            final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas;
             datas = providerBusiness.getDatasFromProviderId(provider.getId());
-            for (final org.constellation.engine.register.Data data : datas) {
-                if (data.isIncluded() && !data.isHidden()) {
+            for (final org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
+                if (data.getIncluded() && !data.getHidden()) {
                     final QName name = new QName(data.getNamespace(), data.getName());
                     final DataBrief db = dataBusiness.getDataBrief(name, providerId);
                     if ((published && (db.getTargetService() == null || db.getTargetService().size() == 0)) ||
@@ -1927,10 +1927,10 @@ public class DataRest {
         final List<Dataset> datasets = datasetBusiness.getAllDataset();
         if(datasets!=null){
             for(final Dataset ds : datasets){
-                final List<org.constellation.engine.register.Data> dataList = dataBusiness.findByDatasetId(ds.getId());
+                final List<org.constellation.engine.register.jooq.tables.pojos.Data> dataList = dataBusiness.findByDatasetId(ds.getId());
                 final List<DataBrief> briefs = new ArrayList<>();
-                for (final org.constellation.engine.register.Data data : dataList) {
-                    if (data.isIncluded() && !data.isHidden()) {
+                for (final org.constellation.engine.register.jooq.tables.pojos.Data data : dataList) {
+                    if (data.getIncluded() && !data.getHidden()) {
                         final QName name = new QName(data.getNamespace(), data.getName());
                         final DataBrief db = dataBusiness.getDataBrief(name, data.getProvider());
                         if ((published  && (db.getTargetService() == null ||  db.getTargetService().isEmpty())) ||
@@ -1964,11 +1964,11 @@ public class DataRest {
                 // Remove all providers that have a parent
                 continue;
             }
-            final List<org.constellation.engine.register.Data> datas;
+            final List<org.constellation.engine.register.jooq.tables.pojos.Data> datas;
             datas = providerBusiness.getDatasFromProviderId(provider.getId());
-            for (final org.constellation.engine.register.Data data : datas) {
+            for (final org.constellation.engine.register.jooq.tables.pojos.Data data : datas) {
 
-                if (data.isIncluded() && !data.isHidden()) {
+                if (data.getIncluded() && !data.getHidden()) {
                     final QName name = new QName(data.getNamespace(), data.getName());
                     final DataBrief db = dataBusiness.getDataBrief(name, providerId);
                     if ((sensorable && (db.getTargetSensor() == null || db.getTargetSensor().size() == 0)) ||
@@ -1991,10 +1991,10 @@ public class DataRest {
         final List<Dataset> datasets = datasetBusiness.getAllDataset();
         if(datasets!=null){
             for(final Dataset ds : datasets){
-                final List<org.constellation.engine.register.Data> dataList = dataBusiness.findByDatasetId(ds.getId());
+                final List<org.constellation.engine.register.jooq.tables.pojos.Data> dataList = dataBusiness.findByDatasetId(ds.getId());
                 final List<DataBrief> briefs = new ArrayList<>();
-                for (final org.constellation.engine.register.Data data : dataList) {
-                    if (data.isIncluded() && !data.isHidden()) {
+                for (final org.constellation.engine.register.jooq.tables.pojos.Data data : dataList) {
+                    if (data.getIncluded() && !data.getHidden()) {
                         final QName name = new QName(data.getNamespace(), data.getName());
                         final DataBrief db = dataBusiness.getDataBrief(name, data.getProvider());
                         if ((sensorable && (db.getTargetSensor() == null ||  db.getTargetSensor().isEmpty())) ||
