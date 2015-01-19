@@ -78,12 +78,14 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
     @Transactional(propagation = Propagation.MANDATORY)
     public Data create(Data data) {
         DataRecord newRecord = dsl.newRecord(DATA);
-        
+
         newRecord.setDatasetId(data.getDatasetId());
         newRecord.setDate(data.getDate());
         newRecord.setFeatureCatalog(data.getFeatureCatalog());
-        newRecord.setHidden(data.getHidden());
-        newRecord.setIncluded(data.getIncluded());
+        if (data.getHidden() != null)
+            newRecord.setHidden(data.getHidden());
+        if (data.getIncluded() != null)
+            newRecord.setIncluded(data.getIncluded());
         newRecord.setIsoMetadata(data.getIsoMetadata());
         newRecord.setMdCompletion(data.getMdCompletion());
         newRecord.setMetadata(data.getMetadata());
@@ -93,12 +95,14 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
         newRecord.setOwner(data.getOwner());
         newRecord.setProvider(data.getProvider());
         newRecord.setRendered(data.getRendered());
-        newRecord.setSensorable(data.getSensorable());
+        if (data.getSensorable() != null)
+            newRecord.setSensorable(data.getSensorable());
         newRecord.setStatsResult(data.getStatsResult());
         newRecord.setStatsState(data.getStatsState());
-        newRecord.setSubtype(data.getSubtype());
+        if (data.getSubtype() != null)
+            newRecord.setSubtype(data.getSubtype());
         newRecord.setType(data.getType());
-        
+
         newRecord.store();
         return newRecord.into(Data.class);
     }
@@ -127,7 +131,7 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
 
     private Condition buildWhereClause(String namespaceURI, String localPart, String providerId) {
         Condition whereClause = Tables.PROVIDER.IDENTIFIER.eq(providerId).and(DATA.NAME.eq(localPart));
-        if (namespaceURI != null && ! namespaceURI.isEmpty()) {
+        if (namespaceURI != null && !namespaceURI.isEmpty()) {
             return whereClause.and(DATA.NAMESPACE.eq(namespaceURI));
         }
         return whereClause;
@@ -148,15 +152,13 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
     public List<Data> findByProviderId(Integer id) {
         return dsl.select().from(DATA).where(DATA.PROVIDER.eq(id)).fetchInto(Data.class);
     }
-    
+
     @Override
     public List<Data> findByDatasetId(Integer id) {
-        return dsl.select().from(DATA)
-                .where(DATA.DATASET_ID.eq(id))
-                .and(DATA.INCLUDED.eq(Boolean.TRUE))
+        return dsl.select().from(DATA).where(DATA.DATASET_ID.eq(id)).and(DATA.INCLUDED.eq(Boolean.TRUE))
                 .and(DATA.HIDDEN.isNull().or(DATA.HIDDEN.isFalse())).fetchInto(Data.class);
     }
-    
+
     @Override
     public List<Data> findAllByDatasetId(Integer id) {
         return dsl.select().from(DATA).where(DATA.DATASET_ID.eq(id)).fetchInto(Data.class);
@@ -184,28 +186,14 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
     @Transactional(propagation = Propagation.MANDATORY)
     public void update(Data data) {
 
-        dsl.update(DATA)
-                .set(DATA.DATE, data.getDate())
-                .set(DATA.ISO_METADATA, data.getIsoMetadata())
-                .set(DATA.METADATA, data.getMetadata())
-                .set(DATA.METADATA_ID, data.getMetadataId())
-                .set(DATA.NAME, data.getName())
-                .set(DATA.NAMESPACE, data.getNamespace())
-                .set(DATA.OWNER, data.getOwner())
-                .set(DATA.PROVIDER, data.getProvider())
-                .set(DATA.SENSORABLE, data.getSensorable())
-                .set(DATA.SUBTYPE, data.getSubtype())
-                .set(DATA.TYPE, data.getType())
-                .set(DATA.INCLUDED, data.getIncluded())
-                .set(DATA.DATASET_ID, data.getDatasetId())
-                .set(DATA.FEATURE_CATALOG, data.getFeatureCatalog())
-                .set(DATA.STATS_RESULT, data.getStatsResult())
-                .set(DATA.STATS_STATE, data.getStatsState())
-                .set(DATA.RENDERED, data.getRendered())
-                .set(DATA.HIDDEN, data.getHidden())
-                .set(DATA.MD_COMPLETION,data.getMdCompletion())
-                .where(DATA.ID.eq(data.getId()))
-                .execute();
+        dsl.update(DATA).set(DATA.DATE, data.getDate()).set(DATA.ISO_METADATA, data.getIsoMetadata())
+                .set(DATA.METADATA, data.getMetadata()).set(DATA.METADATA_ID, data.getMetadataId()).set(DATA.NAME, data.getName())
+                .set(DATA.NAMESPACE, data.getNamespace()).set(DATA.OWNER, data.getOwner()).set(DATA.PROVIDER, data.getProvider())
+                .set(DATA.SENSORABLE, data.getSensorable()).set(DATA.SUBTYPE, data.getSubtype()).set(DATA.TYPE, data.getType())
+                .set(DATA.INCLUDED, data.getIncluded()).set(DATA.DATASET_ID, data.getDatasetId())
+                .set(DATA.FEATURE_CATALOG, data.getFeatureCatalog()).set(DATA.STATS_RESULT, data.getStatsResult())
+                .set(DATA.STATS_STATE, data.getStatsState()).set(DATA.RENDERED, data.getRendered()).set(DATA.HIDDEN, data.getHidden())
+                .set(DATA.MD_COMPLETION, data.getMdCompletion()).where(DATA.ID.eq(data.getId())).execute();
 
     }
 
@@ -227,18 +215,21 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
 
     @Override
     public Data findByIdentifierWithEmptyMetadata(String localPart) {
-        return dsl.select().from(DATA).where(DATA.NAME.eq(localPart)).and(DATA.METADATA_ID.isNull()).and(DATA.ISO_METADATA.isNull()).fetchOneInto(Data.class);
+        return dsl.select().from(DATA).where(DATA.NAME.eq(localPart)).and(DATA.METADATA_ID.isNull()).and(DATA.ISO_METADATA.isNull())
+                .fetchOneInto(Data.class);
     }
 
     @Override
     public List<Data> getCswLinkedData(final int cswId) {
-        return dsl.select(DATA.fields()).from(DATA).join(DATA_X_CSW).onKey(DATA_X_CSW.DATA_ID).where(DATA_X_CSW.CSW_ID.eq(cswId)).fetchInto(Data.class);
+        return dsl.select(DATA.fields()).from(DATA).join(DATA_X_CSW).onKey(DATA_X_CSW.DATA_ID).where(DATA_X_CSW.CSW_ID.eq(cswId))
+                .fetchInto(Data.class);
     }
-    
+
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public DataXCsw addDataToCSW(final int serviceID, final int dataID) {
-        final DataXCsw dxc = dsl.select().from(DATA_X_CSW).where(DATA_X_CSW.CSW_ID.eq(serviceID)).and(DATA_X_CSW.DATA_ID.eq(dataID)).fetchOneInto(DataXCsw.class);
+        final DataXCsw dxc = dsl.select().from(DATA_X_CSW).where(DATA_X_CSW.CSW_ID.eq(serviceID)).and(DATA_X_CSW.DATA_ID.eq(dataID))
+                .fetchOneInto(DataXCsw.class);
         if (dxc == null) {
             DataXCswRecord newRecord = dsl.newRecord(DATA_X_CSW);
             newRecord.setCswId(serviceID);
@@ -269,7 +260,8 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
 
     @Override
     public void linkDataToData(final int dataId, final int childId) {
-        final DataXData dxd = dsl.select().from(DATA_X_DATA).where(DATA_X_DATA.DATA_ID.eq(dataId)).and(DATA_X_DATA.CHILD_ID.eq(childId)).fetchOneInto(DataXData.class);
+        final DataXData dxd = dsl.select().from(DATA_X_DATA).where(DATA_X_DATA.DATA_ID.eq(dataId)).and(DATA_X_DATA.CHILD_ID.eq(childId))
+                .fetchOneInto(DataXData.class);
         if (dxd == null) {
             DataXDataRecord newRecord = dsl.newRecord(DATA_X_DATA);
             newRecord.setDataId(dataId);
@@ -280,9 +272,8 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
 
     @Override
     public List<Data> getDataLinkedData(final int dataId) {
-        return dsl.select(DATA.fields()).from(DATA)
-                .join(DATA_X_DATA).onKey(DATA_X_DATA.CHILD_ID)
-                .where(DATA_X_DATA.DATA_ID.eq(dataId)).fetchInto(Data.class);
+        return dsl.select(DATA.fields()).from(DATA).join(DATA_X_DATA).onKey(DATA_X_DATA.CHILD_ID).where(DATA_X_DATA.DATA_ID.eq(dataId))
+                .fetchInto(Data.class);
     }
 
     /**
@@ -295,15 +286,13 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
 
     @Override
     public List<Data> getDataByLinkedStyle(final int styleId) {
-        return dsl.select(DATA.fields()).from(DATA)
-                .join(STYLED_DATA).onKey(STYLED_DATA.DATA)
-                .where(STYLED_DATA.STYLE.eq(styleId)).fetchInto(Data.class);
+        return dsl.select(DATA.fields()).from(DATA).join(STYLED_DATA).onKey(STYLED_DATA.DATA).where(STYLED_DATA.STYLE.eq(styleId))
+                .fetchInto(Data.class);
     }
 
     @Override
     public List<Data> findStatisticLess() {
-        return dsl.select().from(DATA)
-                .where(DATA.TYPE.eq("COVERAGE"))
-                .and(DATA.RENDERED.isNull().or(DATA.RENDERED.isFalse())).fetchInto(Data.class);
+        return dsl.select().from(DATA).where(DATA.TYPE.eq("COVERAGE")).and(DATA.RENDERED.isNull().or(DATA.RENDERED.isFalse()))
+                .fetchInto(Data.class);
     }
 }

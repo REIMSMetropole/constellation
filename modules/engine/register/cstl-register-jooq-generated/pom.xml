@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.constellation.engine</groupId>
@@ -7,26 +8,15 @@
   </parent>
   <groupId>org.constellation.engine.register</groupId>
   <artifactId>cstl-register-jooq-generated</artifactId>
-  
-  
+
+
   <dependencies>
-    <dependency>
-      <groupId>org.constellation.engine.register</groupId>
-      <artifactId>cstl-register-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.constellation.library</groupId>
-      <artifactId>cstl-lib-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    
-     <dependency>
+   <dependency>
       <groupId>org.constellation.engine</groupId>
       <artifactId>derby-store</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
+  
     <dependency>
       <groupId>org.jooq</groupId>
       <artifactId>jooq</artifactId>
@@ -42,46 +32,12 @@
       <artifactId>jooq-codegen</artifactId>
       <version>3.3.2</version>
     </dependency>
-
-
-
-
-    <!-- Logging -->
-
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.0.13</version>
-    </dependency>
-
-    <!-- Spring (transitive dependencies are not listed explicitly) -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-
-   
-
-
-
- 
   </dependencies>
 
   <build>
 
     <plugins>
+
 
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -109,6 +65,7 @@
           </arguments>
         </configuration>
       </plugin>
+
 
       <plugin>
 
@@ -220,6 +177,6 @@
       </plugins>
     </pluginManagement>
   </build>
-  
-  
+
+
 </project>
