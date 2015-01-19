@@ -23,6 +23,8 @@ import static org.constellation.engine.register.jooq.Tables.DATA_I18N;
 import static org.constellation.engine.register.jooq.Tables.DATA_X_CSW;
 import static org.constellation.engine.register.jooq.Tables.DATA_X_DATA;
 import static org.constellation.engine.register.jooq.Tables.DATA_X_DOMAIN;
+import static org.constellation.engine.register.jooq.Tables.STYLED_DATA;
+
 
 import java.util.LinkedHashMap;
 import java.util.List;
