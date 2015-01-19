@@ -155,7 +155,13 @@ public class JooqUserRepository extends AbstractJooqRespository<CstlUserRecord, 
         user.setActive(true);
         CstlUserRecord newRecord = dsl.newRecord(CSTL_USER);
 
-        newRecord.from(user);
+        newRecord.setActive(true);
+        newRecord.setEmail(user.getEmail());
+        newRecord.setFirstname(user.getFirstname());
+        newRecord.setLastname(user.getLastname());
+        newRecord.setLogin(user.getLogin());
+        newRecord.setPassword(user.getPassword());
+        
 
         if (newRecord.store() > 0) {
             user.setId(newRecord.getId());

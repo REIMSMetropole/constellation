@@ -46,6 +46,17 @@ public class JooqTaskRepository extends AbstractJooqRespository<TaskRecord, Task
     public Task create(Task task) {
         TaskRecord newRecord = dsl.newRecord(Tables.TASK);
         
+        newRecord.setDateEnd(task.getDateEnd());
+        newRecord.setDateStart(task.getDateStart());
+        newRecord.setIdentifier(task.getIdentifier());
+        newRecord.setMessage(task.getMessage());
+        newRecord.setOwner(task.getOwner());
+        newRecord.setProgress(task.getProgress());
+        newRecord.setState(task.getState());
+        newRecord.setTaskOutput(task.getTaskOutput());
+        newRecord.setTaskParameterId(task.getTaskParameterId());
+        newRecord.setType(task.getType());
+        
         newRecord.from(task);
         
         newRecord.store();
