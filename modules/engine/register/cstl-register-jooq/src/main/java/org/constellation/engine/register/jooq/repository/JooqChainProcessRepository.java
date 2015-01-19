@@ -23,7 +23,6 @@ import static org.constellation.engine.register.jooq.Tables.CHAIN_PROCESS;
 
 import java.util.List;
 
-import org.constellation.engine.register.helper.ChainProcessHelper;
 import org.constellation.engine.register.jooq.tables.pojos.ChainProcess;
 import org.constellation.engine.register.jooq.tables.records.ChainProcessRecord;
 import org.constellation.engine.register.repository.ChainProcessRepository;
@@ -50,7 +49,12 @@ public class JooqChainProcessRepository extends AbstractJooqRespository<ChainPro
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public ChainProcess create(ChainProcess chain) {
-        ChainProcessRecord newRecord = ChainProcessHelper.copy(chain, dsl.newRecord(CHAIN_PROCESS));
+        ChainProcessRecord newRecord = dsl.newRecord(CHAIN_PROCESS);
+        
+        newRecord.setAuth(chain.getAuth());
+        newRecord.setCode(chain.getCode());
+        newRecord.setConfig(chain.getConfig());
+        
         newRecord.store();
         return newRecord.into(ChainProcess.class);
     }

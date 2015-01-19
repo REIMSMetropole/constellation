@@ -6,7 +6,6 @@ import static org.constellation.engine.register.jooq.Tables.SENSORED_DATA;
 
 import java.util.List;
 
-import org.constellation.engine.register.helper.SensorHelper;
 import org.constellation.engine.register.jooq.tables.pojos.Data;
 import org.constellation.engine.register.jooq.tables.pojos.Sensor;
 import org.constellation.engine.register.jooq.tables.records.SensorRecord;
@@ -71,7 +70,13 @@ public class JooqSensorRepository extends AbstractJooqRespository<SensorRecord, 
     @Transactional(propagation = Propagation.MANDATORY)
     public Sensor create(Sensor sensor) {
         SensorRecord sensorRecord = dsl.newRecord(SENSOR);
-        SensorHelper.copy(sensor,sensorRecord);
+        
+        sensorRecord.setIdentifier(sensor.getIdentifier());
+        sensorRecord.setMetadata(sensor.getMetadata());
+        sensorRecord.setParent(sensor.getParent());
+        sensorRecord.setOwner(sensor.getOwner());
+        sensorRecord.setType(sensor.getType());
+        
         sensorRecord.store();
         return sensorRecord.into(Sensor.class);
     }

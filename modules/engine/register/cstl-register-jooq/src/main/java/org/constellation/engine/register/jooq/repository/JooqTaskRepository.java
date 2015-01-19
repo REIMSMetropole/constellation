@@ -20,7 +20,6 @@ package org.constellation.engine.register.jooq.repository;
 
 import java.util.List;
 
-import org.constellation.engine.register.helper.TaskHelper;
 import org.constellation.engine.register.jooq.Tables;
 import org.constellation.engine.register.jooq.tables.pojos.Task;
 import org.constellation.engine.register.jooq.tables.records.TaskRecord;
@@ -45,7 +44,10 @@ public class JooqTaskRepository extends AbstractJooqRespository<TaskRecord, Task
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public Task create(Task task) {
-        TaskRecord newRecord = TaskHelper.copy(task, dsl.newRecord(Tables.TASK));
+        TaskRecord newRecord = dsl.newRecord(Tables.TASK);
+        
+        newRecord.from(task);
+        
         newRecord.store();
         return newRecord.into(Task.class);
     }

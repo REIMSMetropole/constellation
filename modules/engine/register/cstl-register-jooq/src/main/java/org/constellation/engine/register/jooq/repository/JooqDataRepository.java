@@ -25,12 +25,10 @@ import static org.constellation.engine.register.jooq.Tables.DATA_X_DATA;
 import static org.constellation.engine.register.jooq.Tables.DATA_X_DOMAIN;
 import static org.constellation.engine.register.jooq.Tables.STYLED_DATA;
 
-
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.constellation.engine.register.helper.DataHelper;
 import org.constellation.engine.register.i18n.DataWithI18N;
 import org.constellation.engine.register.jooq.Tables;
 import org.constellation.engine.register.jooq.tables.DataXData;
@@ -79,7 +77,28 @@ public class JooqDataRepository extends AbstractJooqRespository<DataRecord, Data
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public Data create(Data data) {
-        DataRecord newRecord = DataHelper.copy(data, dsl.newRecord(DATA));
+        DataRecord newRecord = dsl.newRecord(DATA);
+        
+        newRecord.setDatasetId(data.getDatasetId());
+        newRecord.setDate(data.getDate());
+        newRecord.setFeatureCatalog(data.getFeatureCatalog());
+        newRecord.setHidden(data.getHidden());
+        newRecord.setIncluded(data.getIncluded());
+        newRecord.setIsoMetadata(data.getIsoMetadata());
+        newRecord.setMdCompletion(data.getMdCompletion());
+        newRecord.setMetadata(data.getMetadata());
+        newRecord.setMetadataId(data.getMetadataId());
+        newRecord.setName(data.getName());
+        newRecord.setNamespace(data.getNamespace());
+        newRecord.setOwner(data.getOwner());
+        newRecord.setProvider(data.getProvider());
+        newRecord.setRendered(data.getRendered());
+        newRecord.setSensorable(data.getSensorable());
+        newRecord.setStatsResult(data.getStatsResult());
+        newRecord.setStatsState(data.getStatsState());
+        newRecord.setSubtype(data.getSubtype());
+        newRecord.setType(data.getType());
+        
         newRecord.store();
         return newRecord.into(Data.class);
     }

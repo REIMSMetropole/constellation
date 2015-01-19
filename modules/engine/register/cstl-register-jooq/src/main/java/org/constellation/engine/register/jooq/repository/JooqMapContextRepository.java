@@ -24,7 +24,6 @@ import static org.constellation.engine.register.jooq.Tables.MAPCONTEXT_STYLED_LA
 
 import java.util.List;
 
-import org.constellation.engine.register.helper.MapcontextHelper;
 import org.constellation.engine.register.jooq.tables.pojos.Mapcontext;
 import org.constellation.engine.register.jooq.tables.pojos.MapcontextStyledLayer;
 import org.constellation.engine.register.jooq.tables.records.MapcontextRecord;
@@ -83,8 +82,19 @@ public class JooqMapContextRepository extends AbstractJooqRespository<Mapcontext
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public Mapcontext create(Mapcontext mapContext) {
-        MapcontextRecord newRecord = MapcontextHelper.copy(mapContext, dsl.newRecord(MAPCONTEXT));
+        MapcontextRecord newRecord = dsl.newRecord(MAPCONTEXT);
 
+        newRecord.setCrs(mapContext.getCrs());
+        newRecord.setDescription(mapContext.getDescription());
+        newRecord.setEast(mapContext.getEast());
+        newRecord.setKeywords(mapContext.getKeywords());
+        newRecord.setName(mapContext.getName());
+        newRecord.setNorth(mapContext.getNorth());
+        newRecord.setOwner(mapContext.getOwner());
+        newRecord.setSouth(mapContext.getSouth());
+        newRecord.setWest(mapContext.getWest());
+
+        
         newRecord.store();
         return newRecord.into(Mapcontext.class);
     }

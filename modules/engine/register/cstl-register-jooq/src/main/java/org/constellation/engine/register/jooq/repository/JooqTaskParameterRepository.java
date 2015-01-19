@@ -21,7 +21,6 @@ package org.constellation.engine.register.jooq.repository;
 import java.util.Date;
 import java.util.List;
 
-import org.constellation.engine.register.helper.TaskParameterHelper;
 import org.constellation.engine.register.jooq.Tables;
 import org.constellation.engine.register.jooq.tables.pojos.TaskParameter;
 import org.constellation.engine.register.jooq.tables.records.TaskParameterRecord;
@@ -57,7 +56,17 @@ public class JooqTaskParameterRepository extends AbstractJooqRespository<TaskPar
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public TaskParameter create(TaskParameter task ) {
-        TaskParameterRecord newRecord = TaskParameterHelper.copy(task, dsl.newRecord(Tables.TASK_PARAMETER));
+        TaskParameterRecord newRecord = dsl.newRecord(Tables.TASK_PARAMETER);
+        
+        newRecord.setDate(task.getDate());
+        newRecord.setInputs(task.getInputs());
+        newRecord.setName(task.getName());
+        newRecord.setOwner(task.getOwner());
+        newRecord.setProcessCode(task.getProcessCode());
+        newRecord.setProcessAuthority(task.getProcessAuthority());
+        newRecord.setTrigger(task.getTrigger());
+        newRecord.setTriggerType(task.getTriggerType());
+        
         newRecord.store();
         return newRecord.into(TaskParameter.class);
     }

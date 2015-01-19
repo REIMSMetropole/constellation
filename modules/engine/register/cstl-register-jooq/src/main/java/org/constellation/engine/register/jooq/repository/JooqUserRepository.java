@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.constellation.engine.register.DomainUser;
-import org.constellation.engine.register.helper.CstlUserHelper;
 import org.constellation.engine.register.jooq.Tables;
 import org.constellation.engine.register.jooq.tables.UserXDomainXDomainrole;
 import org.constellation.engine.register.jooq.tables.UserXRole;
@@ -156,7 +155,7 @@ public class JooqUserRepository extends AbstractJooqRespository<CstlUserRecord, 
         user.setActive(true);
         CstlUserRecord newRecord = dsl.newRecord(CSTL_USER);
 
-        CstlUserHelper.copy(user, newRecord);
+        newRecord.from(user);
 
         if (newRecord.store() > 0) {
             user.setId(newRecord.getId());
