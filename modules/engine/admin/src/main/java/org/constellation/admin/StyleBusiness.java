@@ -524,10 +524,8 @@ public class StyleBusiness implements IStyleBusiness {
                     return input.getId();
                 }
             }).orNull();
-            //FIXME jooq-powa final Style newStyle = new Style(styleName, provider.getId(), getTypeFromMutableStyle(style), new Date().getTime(),
-//                    sw.toString(), userId);
-            
-            Style newStyle = new Style();
+            final Style newStyle = new Style(null,styleName, provider.getId(), getTypeFromMutableStyle(style), new Date().getTime(),
+                    sw.toString(), userId);
             
             styleRepository.create(newStyle);
         }
