@@ -57,8 +57,9 @@ public class JooqTaskParameterRepository extends AbstractJooqRespository<TaskPar
     @Transactional(propagation = Propagation.MANDATORY)
     public TaskParameter create(TaskParameter task ) {
         TaskParameterRecord newRecord = dsl.newRecord(Tables.TASK_PARAMETER);
-        
-        newRecord.setDate(task.getDate());
+        if (task.getDate() != null) {
+            newRecord.setDate(task.getDate());
+        }
         newRecord.setInputs(task.getInputs());
         newRecord.setName(task.getName());
         newRecord.setOwner(task.getOwner());
@@ -66,7 +67,8 @@ public class JooqTaskParameterRepository extends AbstractJooqRespository<TaskPar
         newRecord.setProcessAuthority(task.getProcessAuthority());
         newRecord.setTrigger(task.getTrigger());
         newRecord.setTriggerType(task.getTriggerType());
-        
+        newRecord.setType(task.getType());
+
         newRecord.store();
         return newRecord.into(TaskParameter.class);
     }

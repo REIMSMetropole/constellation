@@ -22,6 +22,7 @@ package org.constellation.scheduler;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,6 +91,7 @@ public class QuartzJobListener implements JobListener {
         taskEntity.setState(TaskState.PENDING.name());
         taskEntity.setTaskParameterId(quartzTask.getTaskParameterId());
         taskEntity.setOwner(quartzTask.getUserId());
+        taskEntity.setDateStart(new Date().getTime());
         taskEntity.setType(""); // TODO
         processBusiness.addTask(taskEntity);
 

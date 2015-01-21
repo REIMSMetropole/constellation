@@ -45,9 +45,7 @@ public class JooqTaskRepository extends AbstractJooqRespository<TaskRecord, Task
     @Transactional(propagation = Propagation.MANDATORY)
     public Task create(Task task) {
         TaskRecord newRecord = dsl.newRecord(Tables.TASK);
-        
-        newRecord.setDateEnd(task.getDateEnd());
-        newRecord.setDateStart(task.getDateStart());
+
         newRecord.setIdentifier(task.getIdentifier());
         newRecord.setMessage(task.getMessage());
         newRecord.setOwner(task.getOwner());
@@ -56,7 +54,11 @@ public class JooqTaskRepository extends AbstractJooqRespository<TaskRecord, Task
         newRecord.setTaskOutput(task.getTaskOutput());
         newRecord.setTaskParameterId(task.getTaskParameterId());
         newRecord.setType(task.getType());
-        
+        if (task.getDateStart() != null) {
+            newRecord.setDateStart(task.getDateStart());
+        }
+        newRecord.setDateEnd(task.getDateEnd());
+
         newRecord.from(task);
         
         newRecord.store();
